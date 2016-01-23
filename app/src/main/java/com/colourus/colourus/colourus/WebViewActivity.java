@@ -34,9 +34,9 @@ public class WebViewActivity extends Activity{
 
                 //-----Initializes string with sample data for now-----
                 //url = "https://subdomain.domain.com?Canada,ayy,lmao,jonathan,is,the,best";
+                Log.d("asdf", "The server returned: " + url);
 
                 rawTrending = url;
-
 
                 ShowAlertDialogWithListview();
 
@@ -45,7 +45,7 @@ public class WebViewActivity extends Activity{
         });
         //Loads the webpage, forcing a reload if it's already cached
         //Todo: Find a way to prevent the caching in the first place?
-        webView.loadUrl( "javascript:window.location.reload( true )" );
+        webView.loadUrl("javascript:window.location.reload(true)");
         webView.loadUrl("http://webspace.ocad.ca/~ml13mo/Test.html");
 
     }
@@ -57,23 +57,36 @@ public class WebViewActivity extends Activity{
 
         //We cut off all text before the question mark
         rawTrending = rawTrending.substring(rawTrending.indexOf("?") + 1);
+        rawTrending += "&";
 
-        //Splits hashtags by & into an array
-        String outList[] = rawTrending.split("&");
-
-        //Todo: Quite inefficient here as we split it into an array then immediately copy it into an array list
         //Adds stuff to the array list
         List<String> mTrending = new ArrayList<String>();
-        for (int i = 1; i < outList.length; i++) {
-            //Adds a hashtag in front of all array elements
-            mTrending.add("#" + outList[i]);
-            Log.d("asdf", "url split: " + outList[i]);
+        String temp = "";
+        String title = "";
+        for (int i = 0; i < rawTrending.length(); i++) {
+            if (rawTrending.charAt(i) == '&'){
+                //Sets the first element in the string as the title
+                if (title.equals("")){
+                    title = temp;
+                }
+                //Sets the remaining elements in the string
+                else {
+                    //Adds a hashtag in front of all array elements
+                    mTrending.add("#" + temp);
+                }
+                //Empties the string once we hit &
+                temp = "";
+            }
+            //Adds elements to the string until we hit &
+            else {
+                temp += rawTrending.charAt(i);
+            }
         }
 
         //Create sequence of items
         final CharSequence[] trendingTweets = mTrending.toArray(new String[mTrending.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Trending Tweets in " + outList[0]);
+        dialogBuilder.setTitle("Trending Tweets in " + title);
         dialogBuilder.setItems(trendingTweets, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 //Gets the selected item in the listview
