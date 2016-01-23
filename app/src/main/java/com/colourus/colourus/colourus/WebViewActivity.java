@@ -30,9 +30,7 @@ public class WebViewActivity extends Activity{
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-/*                Log.d("asdf", url);
-                url = url.substring(6);
-                Log.d("asdf", url);*/
+                //Upon selecting a country, the web server sends us its unique url which we pass to the ShowAlertDialog for parsing
 
                 //-----Initializes string with sample data for now-----
                 //url = "https://subdomain.domain.com?Canada,ayy,lmao,jonathan,is,the,best";
@@ -45,7 +43,8 @@ public class WebViewActivity extends Activity{
                 return true;
             }
         });
-        //webView.loadUrl("https://www.google.ca");
+        //Loads the webpage, forcing a reload if it's already cached
+        //Todo: Find a way to prevent the caching in the first place?
         webView.loadUrl( "javascript:window.location.reload( true )" );
         webView.loadUrl("http://webspace.ocad.ca/~ml13mo/Test.html");
 
@@ -53,38 +52,37 @@ public class WebViewActivity extends Activity{
 
     public void ShowAlertDialogWithListview()
     {
-        //int index = url.indexOf("?");
+        //A raw url would look like this: https://subdomain.domain.com?Canada&ayy&lmao&jonathan&is&the&best
+        //The first variable after the question mark is the country name, followed by the top trending hashtags separated by &
+
+        //We cut off all text before the question mark
         rawTrending = rawTrending.substring(rawTrending.indexOf("?") + 1);
-        Log.d("asdf", "Parsed url is: " + rawTrending);
 
-        String outList[] = rawTrending.split(",");
+        //Splits hashtags by & into an array
+        String outList[] = rawTrending.split("&");
 
-
+        //Todo: Quite inefficient here as we split it into an array then immediately copy it into an array list
+        //Adds stuff to the array list
         List<String> mTrending = new ArrayList<String>();
         for (int i = 1; i < outList.length; i++) {
+            //Adds a hashtag in front of all array elements
             mTrending.add("#" + outList[i]);
             Log.d("asdf", "url split: " + outList[i]);
         }
 
-
-/*        List<String> mAnimals = new ArrayList<String>();
-        mAnimals.add("Cat");
-        mAnimals.add("Dog");
-        mAnimals.add("Horse");
-        mAnimals.add("Elephant");
-        mAnimals.add("Rat");
-        mAnimals.add("Lion");*/
         //Create sequence of items
         final CharSequence[] trendingTweets = mTrending.toArray(new String[mTrending.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Trending Tweets in " + outList[0]);
         dialogBuilder.setItems(trendingTweets, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                String selectedText = trendingTweets[item].toString();  //Selected item in listview
+                //Gets the selected item in the listview
+                String selectedText = trendingTweets[item].toString();
                 Log.d("asdf", selectedText + " was selected");
 
                 //Do a .replace for # to nothing in selectedText
                 //Search twitter for https://twitter.com/search?q=%23selectedText
+                //%23 is the hashtag
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/search?q=%23" + selectedText.replace("#", "")));
                 startActivity(browserIntent);
             }
