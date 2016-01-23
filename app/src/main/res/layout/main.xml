@@ -8,6 +8,6 @@
         android:id="@+id/buttonUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to http://www.google.com" />
+        android:text="Open Website" />
 
 </LinearLayout>
