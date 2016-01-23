@@ -43,6 +43,8 @@ public class WebViewActivity extends Activity{
                 return true;
             }
         });
+        webView.getSettings().setUserAgentString("twitter-bird");
+
         //Loads the webpage, forcing a reload if it's already cached
         //Todo: Find a way to prevent the caching in the first place?
         webView.loadUrl("javascript:window.location.reload(true)");
