@@ -1,4 +1,4 @@
-package com.colourus.colourus.colourus;
+package com.colourus.colourus.Sentosphere;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

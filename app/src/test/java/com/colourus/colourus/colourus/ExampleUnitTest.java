@@ -1,4 +1,4 @@
-package com.colourus.colourus.colourus;
+package com.colourus.colourus.Sentosphere;
 
 import org.junit.Test;
 

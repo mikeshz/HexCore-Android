@@ -1,9 +1,7 @@
-package com.colourus.colourus.colourus;
+package com.colourus.colourus.Sentosphere;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,7 +36,12 @@ public class WebViewActivity extends Activity{
 
                 rawTrending = url;
 
-                ShowAlertDialogWithListview();
+                if (!rawTrending.contains(".htm") || !rawTrending.contains(".html")){
+                    ShowAlertDialogWithListview();
+                }
+                else {
+                    webView.loadUrl("http://hexcore.me/map.html");
+                }
 
                 return true;
             }
@@ -48,7 +51,7 @@ public class WebViewActivity extends Activity{
         //Loads the webpage, forcing a reload if it's already cached
         //Todo: Find a way to prevent the caching in the first place?
         webView.loadUrl("javascript:window.location.reload(true)");
-        webView.loadUrl("http://webspace.ocad.ca/~ml13mo/Test.html");
+        webView.loadUrl("http://hexcore.me/");
 
     }
 
